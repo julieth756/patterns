@@ -61,28 +61,13 @@ public class PoolTest {
     @Test
     public void quePasaCuandoSeRetornaUnaconexionContransaccionIniciada(){
         FabricaConexiones fc =new FabricaConexiones("aretico.com", 5432, "software2", "grupo3_5", pwd);
-        PreparedStatement pst = null;
-        for (int i=1; i<=1000; i++) {
-        String stm = "INSERT INTO hilos" + " (hilos, tiempo, tiempo) " + " VALUES(?,?, ?)";
-            pst = fc.activateObject(stm); 
-            pst.setInt(1, 151);
-            pst.setString(2, "Jake 2");
-            pst.setString(3, "CS100");
-            pst.setString(4, "Spring 2013");
-            pst.setInt(5, 4534543);
-            pst.executeUpdate();
-            }
     }
     
     @Test(threadPoolSize = 5, invocationCount = 5)
     public void midaTiemposParaInsertar1000RegistrosConSingleton() throws SQLException, ClassNotFoundException{
-          SingletonConnection s = (SingletonConnection) SingletonConnection.getConnection();
-          Statement stmt = null;
-           for (int i=1; i<=1000; i++) {
-              stmt = s.createStatement();
-              String sql = "";
-                stmt.executeUpdate(sql);
-                stmt.close();
+        for (int i=1; i<=1000; i++) {
+            SingletonConnection s = (SingletonConnection) SingletonConnection.getConnection();
+            String sql = "INSERT INTO grupo3.Hilos(Hilo, numero, numero) VALUES (?, ?, ?);";
             }
 
     }
@@ -90,8 +75,12 @@ public class PoolTest {
     @Test(threadPoolSize = 5, invocationCount = 5)
     public void midaTiemposParaInsertar1000RegistrosConObjectPool() throws Exception{
         FabricaConexiones fc =new FabricaConexiones("aretico.com", 5432, "software2", "grupo3_5", pwd);
-        ObjectPool<Connection> pool=new GenericObjectPool<Connection>(fc);
-        Connection c=pool.borrowObject();
-        pool.returnObject(c); 
+        for (int i=1; i<=1000; i++) {
+            String sql = "INSERT INTO grupo3.Hilos(Hilo, numero, numero) VALUES (?, ?, ?);";
+            ObjectPool<Connection> pool=new GenericObjectPool<Connection>(fc);
+            Connection c=pool.borrowObject();
+            pool.returnObject(c);    
+        }
     }
+       
 }
