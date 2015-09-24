@@ -6,7 +6,9 @@
 package co.edu.unbosque.swii;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.sql.Statement;
 import org.apache.commons.pool2.BaseObjectPool;
 import org.apache.commons.pool2.KeyedObjectPool;
 import org.apache.commons.pool2.ObjectPool;
@@ -15,6 +17,8 @@ import org.apache.commons.pool2.impl.GenericKeyedObjectPool;
 import org.apache.commons.pool2.impl.GenericObjectPool;
 import org.testng.Assert;
 import org.testng.annotations.Test;
+import java.sql.PreparedStatement;
+import sun.net.smtp.SmtpClient;
 
 /**
  *
@@ -57,12 +61,30 @@ public class PoolTest {
     @Test
     public void quePasaCuandoSeRetornaUnaconexionContransaccionIniciada(){
         FabricaConexiones fc =new FabricaConexiones("aretico.com", 5432, "software2", "grupo3_5", pwd);
-      
+        PreparedStatement pst = null;
+        for (int i=1; i<=1000; i++) {
+        String stm = "INSERT INTO hilos" + " (hilos, tiempo, tiempo) " + " VALUES(?,?, ?)";
+            pst = fc.activateObject(stm); 
+            pst.setInt(1, 151);
+            pst.setString(2, "Jake 2");
+            pst.setString(3, "CS100");
+            pst.setString(4, "Spring 2013");
+            pst.setInt(5, 4534543);
+            pst.executeUpdate();
+            }
     }
     
     @Test(threadPoolSize = 5, invocationCount = 5)
-    public void midaTiemposParaInsertar1000RegistrosConSingleton() throws ClassNotFoundException, SQLException{
-          Connection cxA=SingletonConnection.getConnection();
+    public void midaTiemposParaInsertar1000RegistrosConSingleton() throws SQLException, ClassNotFoundException{
+          SingletonConnection s = (SingletonConnection) SingletonConnection.getConnection();
+          Statement stmt = null;
+           for (int i=1; i<=1000; i++) {
+              stmt = s.createStatement();
+              String sql = "";
+                stmt.executeUpdate(sql);
+                stmt.close();
+            }
+
     }
     
     @Test(threadPoolSize = 5, invocationCount = 5)
