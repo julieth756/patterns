@@ -17,7 +17,7 @@ public class SingletonConnection {
         String url="jdbc:postgresql://host:5432/software_2";
         synchronized (control) {
             if(connection!=null) return;
-            connection = DriverManager.getConnection(url, "grupo8", "xxxxxxx");
+            connection = DriverManager.getConnection(url, "grupo3", "YckGwYC8gW");
         }
     }
     public static Connection getConnection() throws ClassNotFoundException, SQLException {

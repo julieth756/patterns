@@ -61,9 +61,8 @@ public class PoolTest {
     }
     
     @Test(threadPoolSize = 5, invocationCount = 5)
-    public void midaTiemposParaInsertar1000RegistrosConSingleton(){
-        FabricaConexiones fc =new FabricaConexiones("aretico.com", 5432, "software2", "grupo3_5", pwd);
-        
+    public void midaTiemposParaInsertar1000RegistrosConSingleton() throws ClassNotFoundException, SQLException{
+          Connection cxA=SingletonConnection.getConnection();
     }
     
     @Test(threadPoolSize = 5, invocationCount = 5)
