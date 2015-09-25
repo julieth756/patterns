@@ -51,7 +51,7 @@ public class PoolTest {
 
     @Test
     public void quePasaCuandoSeCierraUnaConexionAntesDeRetornarla() throws Exception {
-        FabricaConexiones fc = new FabricaConexiones("aretico.com", 5432, "software2", "grupo3_5", pwd);
+        FabricaConexiones fc = new FabricaConexiones("aretico.com", 5432, "software_2", "grupo3_5", pwd);
         ObjectPool<Connection> pool = new GenericObjectPool<Connection>(fc);
         Connection c = pool.borrowObject();
         pool.close();
@@ -60,7 +60,7 @@ public class PoolTest {
 
     @Test
     public void quePasaCuandoSeRetornaUnaconexionContransaccionIniciada() {
-        FabricaConexiones fc = new FabricaConexiones("aretico.com", 5432, "software2", "grupo3_5", pwd);
+        FabricaConexiones fc = new FabricaConexiones("aretico.com", 5432, "software_2", "grupo3_5", pwd);
     }
 
     @Test(threadPoolSize = 5, invocationCount = 5)
@@ -71,14 +71,16 @@ public class PoolTest {
         }
 
     }
+    
+     FabricaConexiones fc = new FabricaConexiones("aretico.com", 5432, "software_2", "grupo3_5", pwd);
+        ObjectPool<Connection> pool = new GenericObjectPool<Connection>(fc);
 
     @Test(threadPoolSize = 5, invocationCount = 5)
     public void midaTiemposParaInsertar1000RegistrosConObjectPool() throws Exception {
-        FabricaConexiones fc = new FabricaConexiones("aretico.com", 5432, "software_2", "grupo3_5", pwd);
-        ObjectPool<Connection> pool = new GenericObjectPool<Connection>(fc);
+       
         Connection c = pool.borrowObject();
         PreparedStatement pst = null;
-        String sql = "INSERT INTO grupo3.HilosGrupo3(hilo, numero_llegada, tiempo) VALUES (?, ?, current_time());";
+        String sql = "INSERT INTO grupo3.hilosgrupo3(hilo_name, numero_llegada, tiempo) VALUES (?, ?, now());";
         pst = c.prepareStatement(sql);
         for (int i = 1; i <= 1000; i++) {
             pst.setString(1, Thread.currentThread().getName());
